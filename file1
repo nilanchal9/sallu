@@ -1,9 +1,24 @@
-import com.lesfurets.jenkins.unit.BasePipelineTest;
-
-class TestExampleJob extends BasePipelineTest {
-    @Test
-    void shouldExecuteWithoutErrors() {
-        loadScript("job/exampleJob.jenkins").execute();
-        printCallStack();
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                // Getting the code from the GitHub repository
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                // Build your Java application (e.g., compile, package)
+                sh 'mvn clean package'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy the application (e.g., copy .war file to a server)
+                sh 'scp target/myapp.war user@server:/path/to/deploy'
+            }
+        }
     }
 }
+
